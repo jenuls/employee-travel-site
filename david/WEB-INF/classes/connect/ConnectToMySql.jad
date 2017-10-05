@@ -1,0 +1,136 @@
+// Decompiled by DJ v3.5.5.77 Copyright 2003 Atanas Neshkov  Date: 2013/10/7 ¤U¤È 04:43:29
+// Home Page : http://members.fortunecity.com/neshkov/dj.html  - Check often for new version!
+// Decompiler options: packimports(3) 
+// Source File Name:   ConnectToMySql.java
+
+package connect;
+
+import java.io.PrintStream;
+import java.sql.*;
+import java.util.ArrayList;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+import javax.sql.rowset.serial.SerialException;
+
+public class ConnectToMySql
+{
+
+    public ConnectToMySql()
+    {
+        resultValueList = null;
+    }
+
+    public void connect(String sql, String type)
+        throws NamingException, SQLException
+    {
+        DataSource ds;
+        Connection conn;
+        Statement stmt;
+        InitialContext ctx = new InitialContext();
+        ds = (DataSource)ctx.lookup("java:comp/env/jdbc/travelDB");
+        conn = null;
+        stmt = null;
+        ResultSet rs = null;
+        conn = ds.getConnection();
+        stmt = conn.createStatement();
+        if(type.equals("1"))
+        {
+            System.out.println(sql);
+            ResultSet rs = stmt.executeQuery(sql);
+            ResultSetMetaData rsmeta = rs.getMetaData();
+            int cols = rsmeta.getColumnCount();
+            resultValueList = new ArrayList();
+            String temp;
+            for(; rs.next(); resultValueList.add(temp))
+            {
+                temp = "";
+                for(int i = 1; i <= cols; i++)
+                    if(temp == "")
+                        temp = rs.getString(i);
+                    else
+                        temp = (new StringBuilder(String.valueOf(temp))).append(";").append(rs.getString(i)).toString();
+
+            }
+
+            rs.close();
+            rs = null;
+            stmt.close();
+            stmt = null;
+            conn.close();
+            conn = null;
+        } else
+        {
+            System.out.println(sql);
+            int j = stmt.executeUpdate(sql);
+        }
+        break MISSING_BLOCK_LABEL_297;
+        Exception exception;
+        exception;
+        if(stmt != null)
+        {
+            try
+            {
+                stmt.close();
+            }
+            catch(SerialException serialexception) { }
+            stmt = null;
+        }
+        if(conn != null)
+        {
+            try
+            {
+                conn.close();
+            }
+            catch(SerialException serialexception1) { }
+            conn = null;
+        }
+        throw exception;
+        if(stmt != null)
+        {
+            try
+            {
+                stmt.close();
+            }
+            catch(SerialException serialexception2) { }
+            stmt = null;
+        }
+        if(conn != null)
+        {
+            try
+            {
+                conn.close();
+            }
+            catch(SerialException serialexception3) { }
+            conn = null;
+        }
+        return;
+    }
+
+    public ArrayList select(String sql)
+        throws NamingException, SQLException
+    {
+        connect(sql, "1");
+        return resultValueList;
+    }
+
+    public void insert(String sql)
+        throws NamingException, SQLException
+    {
+        connect(sql, "2");
+    }
+
+    public void update(String sql)
+        throws NamingException, SQLException
+    {
+        connect(sql, "3");
+    }
+
+    public void delete(String sql)
+        throws NamingException, SQLException
+    {
+        connect(sql, "4");
+    }
+
+    ArrayList resultValueList;
+}
