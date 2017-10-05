@@ -1,0 +1,9 @@
+﻿#暫存資料超過幾分鐘自動清理(單位為分鐘) ex: overMinute=10
+overMinute=5
+#資料庫網址
+mysql_db_url=172.16.253.74
+#資料庫連接埠
+mysql_db_port=3306
+#資料庫帳號
+mysql_user=11003620
+password=1234
